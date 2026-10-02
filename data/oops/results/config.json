@@ -1,0 +1,10 @@
+{
+  "fps": 15,
+  "window": 15,
+  "horizon_s": 3.0,
+  "feat_dim": 166,
+  "threshold": 0.279792457818985,
+  "best_val_ap": 0.7025237402659981,
+  "features": "fallnet.window_features on fill_missing MediaPipe poses",
+  "live_threshold": 0.7
+}

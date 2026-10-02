@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foresight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef2f1;
+    --surface: #ffffff;
+    --surface-2: #f6f8f7;
+    --ink: #12263a;
+    --ink-2: #4b5d70;
+    --muted: #7d8c9b;
+    --line: #dde4e2;
+    --navy: #12263a;
+    --calm: #1f8a70;
+    --calm-wash: #e3f3ee;
+    --amber: #c9840f;
+    --amber-wash: #fdf1dc;
+    --red: #d7263d;
+    --red-wash: #fde4e7;
+    --off: #8a96a3;
+    --off-wash: #eceff2;
+    --radius-l: 18px;
+    --radius-m: 12px;
+    --radius-s: 8px;
+    --font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.5; }
+  button, select, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid #5aa9e6; outline-offset: 2px; }
+
+  /* ---------- Shell ---------- */
+  .shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+  .side { background: var(--navy); color: #dfe8f0; padding: 22px 16px; display: flex; flex-direction: column; gap: 24px; position: sticky; top: 0; height: 100vh; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 0 6px; }
+  .brand svg { flex: none; }
+  .brand b { font-family: var(--display); font-size: 23px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
+  .brand small { display: block; font-size: 12px; color: #93a7ba; font-weight: 500; margin-top: -2px; }
+  nav { display: flex; flex-direction: column; gap: 4px; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-s); color: #c3d1de; text-decoration: none; font-weight: 600; }
+  nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
+  nav a.active { background: rgba(255,255,255,.12); color: #fff; }
+  nav a .badge { margin-left: auto; background: var(--red); color: #fff; font-size: 12px; font-weight: 700; border-radius: 10px; padding: 0 8px; min-width: 22px; text-align: center; }
+  .side-block { padding: 0 6px; }
+  .side-block h3 { font-size: 12px; font-weight: 600; color: #93a7ba; margin: 0 0 8px; }
+  .seg { display: flex; background: rgba(255,255,255,.08); border-radius: var(--radius-s); padding: 3px; gap: 3px; }
+  .seg button { flex: 1; border: 0; background: transparent; color: #c3d1de; padding: 7px 6px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+  .seg button.active { background: #fff; color: var(--navy); }
+  .side-foot { margin-top: auto; padding: 12px; border-radius: var(--radius-m); background: rgba(255,255,255,.06); font-size: 13px; color: #c3d1de; }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--off); margin-right: 8px; vertical-align: 1px; }
+  .dot.on { background: #3ddc97; box-shadow: 0 0 0 4px rgba(61,220,151,.18); }
+  .side-foot p { margin: 6px 0 0; color: #93a7ba; font-size: 12px; }
+
+  main { padding: 28px 32px 48px; max-width: 1280px; width: 100%; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .page-head h1 { font-family: var(--display); font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  .page-head p { margin: 2px 0 0; color: var(--ink-2); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 18px; }
+  .card h2 { font-family: var(--display); font-size: 17px; font-weight: 700; margin: 0 0 12px; }
+  .card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .card-head h2 { margin: 0; }
+  .btn { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: var(--radius-s); font-weight: 600; font-size: 14px; }
+  .btn:hover { background: var(--surface-2); }
+  .btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .btn.primary:hover { background: #1d3a56; }
+  .btn.danger { background: var(--red); border-color: var(--red); color: #fff; }
+  .btn:disabled { opacity: .6; cursor: wait; }
+  .link { color: var(--navy); font-weight: 700; text-decoration: none; font-size: 14px; }
+  .link:hover { text-decoration: underline; }
+  .muted { color: var(--muted); }
+
+  /* ---------- Live status band (the one bold element) ---------- */
+  .band { border-radius: var(--radius-l); padding: 22px; display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 22px; transition: background .4s, box-shadow .4s; background: var(--off-wash); }
+  .band[data-state="NORMAL"] { background: var(--calm-wash); }
+  .band[data-state="WARNING"] { background: var(--amber-wash); }
+  .band[data-state="ALARM"] { background: var(--red-wash); box-shadow: 0 0 0 3px var(--red) inset; animation: alarm 1.2s ease-in-out infinite; }
+  @keyframes alarm { 50% { box-shadow: 0 0 0 7px var(--red) inset; } }
+  @media (prefers-reduced-motion: reduce) { .band[data-state="ALARM"] { animation: none; } }
+  .state-col { display: flex; flex-direction: column; gap: 14px; }
+  .state-word { font-family: var(--display); font-size: 64px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; color: var(--off); }
+  .band[data-state="NORMAL"] .state-word { color: var(--calm); }
+  .band[data-state="WARNING"] .state-word { color: var(--amber); }
+  .band[data-state="ALARM"] .state-word { color: var(--red); }
+  .state-says { font-size: 17px; font-weight: 600; color: var(--ink); margin: 0; }
+  .meter { height: 10px; border-radius: 6px; background: rgba(18,38,58,.12); overflow: hidden; }
+  .meter div { height: 100%; width: 0; border-radius: 6px; background: var(--off); transition: width .25s, background .4s; }
+  .meter-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+  .map { position: relative; border-radius: var(--radius-m); overflow: hidden; background: #d9e1e0; min-height: 220px; }
+  .map img { width: 100%; display: block; }
+  .map canvas { position: absolute; inset: 0; }
+  .map .empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 20px; color: var(--ink-2); }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 14px 16px; }
+  .tile b { font-family: var(--display); display: block; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+  .tile span { font-size: 13px; color: var(--ink-2); }
+
+  .grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+
+  /* ---------- Event list ---------- */
+  .ev-list { display: flex; flex-direction: column; }
+  .ev { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 4px; border-top: 1px solid var(--line); }
+  .ev:first-child { border-top: 0; }
+  .ev-icon { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 15px; background: var(--off-wash); color: var(--off); }
+  .ev-icon.alarm, .ev-icon.danger { background: var(--red-wash); color: var(--red); }
+  .ev-icon.warning { background: var(--amber-wash); color: var(--amber); }
+  .ev-icon.info { background: var(--calm-wash); color: var(--calm); }
+  .ev-title { font-weight: 700; }
+  .ev-detail { color: var(--ink-2); font-size: 14px; overflow-wrap: anywhere; }
+  .ev-meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .ev-actions { display: flex; gap: 6px; align-items: center; }
+  .ev-actions button { border: 1px solid var(--line); background: var(--surface); border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 600; }
+  .ev-actions button:hover { background: var(--surface-2); }
+  .verdict { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+  .verdict.real { background: var(--red-wash); color: var(--red); }
+  .verdict.false { background: var(--off-wash); color: var(--ink-2); }
+  .empty-note { padding: 24px 8px; color: var(--ink-2); }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .chip { border: 1px solid var(--line); background: var(--surface); padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; color: var(--ink-2); }
+  .chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .chip small { font-weight: 700; opacity: .7; margin-left: 4px; }
+  .search { margin-left: auto; border: 1px solid var(--line); border-radius: 20px; padding: 7px 14px; min-width: 220px; background: var(--surface); }
+
+  /* ---------- Zones page ---------- */
+  .zones-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+  .editor .map canvas { cursor: crosshair; touch-action: none; }
+  .steps { margin: 0 0 12px; padding-left: 20px; color: var(--ink-2); font-size: 14px; }
+  .steps li { margin: 3px 0; }
+  .zone-form { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 8px; margin-top: 12px; padding: 12px; border-radius: var(--radius-s); background: var(--surface-2); border: 1px dashed var(--line); }
+  .zone-form select, .zone-form input { border: 1px solid var(--line); border-radius: var(--radius-s); padding: 8px 10px; background: var(--surface); min-width: 0; }
+  .zone-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .zone-item:first-child { border-top: 0; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; background: var(--red); flex: none; }
+  .zone-item.inactive .swatch { background: var(--off); }
+  .zone-item div { flex: 1; min-width: 0; }
+  .zone-item b { display: block; font-size: 14px; }
+  .zone-item span { font-size: 13px; color: var(--muted); }
+  .zone-item button { border: 0; background: transparent; color: var(--red); font-weight: 700; font-size: 13px; }
+  .option { display: flex; gap: 10px; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-s); margin-top: 8px; cursor: pointer; }
+  .option.active { border-color: var(--navy); background: var(--surface-2); }
+  .option input { margin-top: 4px; accent-color: var(--navy); }
+  .option b { display: block; font-size: 14px; }
+  .option span { font-size: 13px; color: var(--ink-2); }
+
+  /* ---------- Toasts ---------- */
+  .toasts { position: fixed; right: 20px; top: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 50; max-width: 360px; }
+  .toast { background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--amber); border-radius: var(--radius-m); padding: 12px 14px; box-shadow: 0 10px 30px rgba(18,38,58,.18); animation: slidein .25s ease-out; }
+  .toast.alarm, .toast.danger { border-left-color: var(--red); }
+  .toast b { display: block; }
+  .toast span { font-size: 14px; color: var(--ink-2); }
+  @keyframes slidein { from { transform: translateX(30px); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1050px) {
+    .band, .zones-layout, .grid-2 { grid-template-columns: 1fr; }
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .shell { grid-template-columns: 1fr; }
+    .side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px; }
+    nav { flex-direction: row; }
+    .side-block h3, .side-foot p { display: none; }
+    .side-foot { margin-top: 0; }
+    main { padding: 20px 16px 40px; }
+    .zone-form { grid-template-columns: 1fr; }
+    .search { margin-left: 0; width: 100%; }
+    .state-word { font-size: 44px; }
+    .ev { grid-template-columns: 34px minmax(0, 1fr); }
+    .ev-actions { grid-column: 2; }
+  }
+  .mode-help { font-size: 12px; color: #93a7ba; margin: 8px 0 0; line-height: 1.45; }
+  .watching { display: flex; flex-wrap: wrap; gap: 6px; }
+  .watching span { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: rgba(255,255,255,.65); color: var(--ink-2); border: 1px solid rgba(18,38,58,.08); }
+  .timeline-card { margin-top: 16px; }
+  .timeline { position: relative; height: 34px; border-radius: var(--radius-s); background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+  .timeline .now { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--navy); opacity: .35; }
+  .timeline .tick { position: absolute; top: 7px; width: 6px; height: 20px; margin-left: -3px; border-radius: 3px; background: var(--calm); }
+  .timeline .tick.warning { background: var(--amber); }
+  .timeline .tick.alarm { background: var(--red); }
+  .tl-axis { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .ev-icon svg { display: block; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand">
+      <svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true">
+        <rect width="40" height="40" rx="11" fill="#1f8a70"/>
+        <path d="M8 29 Q16 14 32 12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="0.1 4.2" opacity=".75"/>
+        <circle cx="12.5" cy="22.3" r="2.1" fill="#fff" opacity=".55"/>
+        <circle cx="19.2" cy="16.4" r="2.7" fill="#fff" opacity=".8"/>
+        <circle cx="31" cy="12.2" r="5.2" fill="#12263a"/>
+        <circle cx="31" cy="12.2" r="3.4" fill="#fff"/>
+      </svg>
+      <div><b id="pname">Foresight</b><small>Accident prediction</small></div>
+    </div>
+    <nav>
+      <a href="#overview" data-nav="overview">Overview</a>
+      <a href="#events" data-nav="events">Activity log <span class="badge" id="navBadge" hidden>0</span></a>
+      <a href="#zones" data-nav="zones">Danger zones</a>
+    </nav>
+    <div class="side-block">
+      <h3>Where is this camera?</h3>
+      <div class="seg">
+        <button class="mode-btn" data-mode="home">Home</button>
+        <button class="mode-btn" data-mode="work">Worksite</button>
+      </div>
+      <p class="mode-help" id="modeHelp"></p>
+    </div>
+    <div class="side-foot">
+      <span class="dot" id="devDot"></span><span id="devText">Camera offline</span>
+      <p>Video stays on the device. Only body points and alerts are sent here.</p>
+    </div>
+  </aside>
+
+  <main>
+    <!-- ===================== Overview ===================== -->
+    <section class="page" data-page="overview">
+      <div class="page-head">
+        <div><h1 id="greeting">Overview</h1><p id="overviewSub">Live view of the room and the latest alerts.</p></div>
+      </div>
+
+      <div class="band" id="band" data-state="OFFLINE">
+        <div class="state-col">
+          <div class="state-word" id="stateWord">Offline</div>
+          <p class="state-says" id="stateSays">Start the camera to begin watching.</p>
+          <div>
+            <div class="meter"><div id="riskBar"></div></div>
+            <div class="meter-row"><span>Fall risk</span><span id="riskNum">0%</span></div>
+          </div>
+          <div><button class="btn danger" id="resetAlarm" hidden>I've checked on them - reset alarm</button></div>
+          <div class="watching" id="watching"></div>
+          <span class="muted" id="sourceLine"></span>
+        </div>
+        <div class="map" id="mapWrap">
+          <img id="mapImg" alt="Room snapshot with danger zones and the live skeleton">
+          <canvas id="mapCanvas"></canvas>
+          <div class="empty" id="mapEmpty" hidden>No room snapshot yet.<br>Open Danger zones and take one.</div>
+        </div>
+      </div>
+
+      <div class="card timeline-card">
+        <div class="card-head"><h2>Today</h2><span class="muted" id="tlSummary"></span></div>
+        <div class="timeline" id="timeline" aria-label="Alerts during the day"></div>
+        <div class="tl-axis"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+      </div>
+
+      <div class="tiles">
+        <div class="tile"><b id="tToday">0</b><span>alerts today</span></div>
+        <div class="tile"><b id="tAlarms">0</b><span>alarms today</span></div>
+        <div class="tile"><b id="tReview">0</b><span>waiting for your review</span></div>
+        <div class="tile"><b id="tFalse">-</b><span>marked as false alarms</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Latest alerts</h2><a class="link" href="#events">See full activity log</a></div>
+        <div class="ev-list" id="recentList"></div>
+      </div>
+    </section>
+
+    <!-- ===================== Activity log ===================== -->
+    <section class="page" data-page="events" hidden>
+      <div class="page-head">
+        <div><h1>Activity log</h1><p>Every warning and alarm. Mark each one so the system learns what's real.</p></div>
+      </div>
+      <div class="filters" id="filters">
+        <button class="chip active" data-filter="all">All <small id="cAll"></small></button>
+        <button class="chip" data-filter="alarm">Alarms <small id="cAlarm"></small></button>
+        <button class="chip" data-filter="warning">Warnings <small id="cWarn"></small></button>
+        <button class="chip" data-filter="info">Resolved <small id="cInfo"></small></button>
+        <button class="chip" data-filter="review">Needs review <small id="cReview"></small></button>
+        <input class="search" id="search" type="search" placeholder="Search alerts, e.g. stove">
+      </div>
+      <div class="card"><div class="ev-list" id="eventList"></div></div>
+    </section>
+
+    <!-- ===================== Danger zones ===================== -->
+    <section class="page" data-page="zones" hidden>
+      <div class="page-head">
+        <div><h1>Danger zones</h1><p>Mark the places that are dangerous in this room. Takes about a minute.</p></div>
+      </div>
+      <div class="zones-layout">
+        <div class="card editor">
+          <ol class="steps">
+            <li>Take a snapshot of the room.</li>
+            <li>Drag a box around the hazard, from its top down to the floor in front of it.</li>
+            <li>Choose what it is and save it.</li>
+          </ol>
+          <div class="map" id="edWrap">
+            <img id="edImg" alt="Room snapshot for drawing zones">
+            <canvas id="edCanvas"></canvas>
+            <div class="empty" id="edEmpty" hidden>No snapshot yet. Press "Take snapshot" with the camera running.</div>
+          </div>
+          <div class="row" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn primary" id="takeSnap">Take snapshot</button>
+            <button class="btn" id="refreshSnap">Reload snapshot</button>
+          </div>
+          <form class="zone-form" id="zoneForm" hidden>
+            <select id="zoneType" aria-label="Zone type"></select>
+            <input id="zoneName" maxlength="60" placeholder="Name, e.g. Kitchen stove" aria-label="Zone name">
+            <button class="btn primary" type="submit">Save zone</button>
+            <button class="btn" type="button" id="cancelZone">Cancel</button>
+          </form>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <h2>Saved zones</h2>
+            <div id="zoneList"></div>
+          </div>
+          <div class="card">
+            <h2>How is the camera mounted?</h2>
+            <label class="option" data-view="angled"><input type="radio" name="view" value="angled">
+              <div><b>High in a corner, tilted down</b><span>Recommended. Best for falls. Distance is judged from where feet touch the floor.</span></div></label>
+            <label class="option" data-view="top"><input type="radio" name="view" value="top">
+              <div><b>On the ceiling, looking straight down</b><span>Good for zones around pools or work bays. Fall detection is weaker.</span></div></label>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+const PRODUCT_NAME = "Foresight";
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const STATE_COLOR = {NORMAL: "#1f8a70", WARNING: "#c9840f", ALARM: "#d7263d", OFFLINE: "#8a96a3"};
+const STATE_TEXT = {
+  NORMAL: ["All clear", "Watching. Nothing risky right now."],
+  WARNING: ["Warning", "Something risky is happening. Check soon."],
+  ALARM: ["Alarm", "Possible accident. Check on them now."],
+  OFFLINE: ["Offline", "The camera isn't sending. Start live.py on the device."],
+};
+const KIND = {
+  fall_warning: "Fall risk rising", fall_alarm: "Fall confirmed", fall_prevented: "Fall avoided",
+  fall_check: "Check on them", fall_recovered: "Back on their feet", zone: "Danger zone",
+  zone_approach: "Heading toward a danger zone", zone_reach: "Reaching toward a hazard",
+  motionless: "Not moving", test: "Test alert",
+};
+const BONES = [[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28],[0,11],[0,12]];
+
+let zoneTypes = {}, zones = [], mode = "home", view = "angled";
+let livePose = null, liveState = "OFFLINE", events = [], lastEventId = null;
+let filter = "all", query = "", start = null, pending = null;
+
+async function api(path, body) {
+  const opts = body === undefined ? {} : {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)};
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+/* ---------- Pages ---------- */
+function showPage() {
+  const page = (location.hash || "#overview").slice(1);
+  const known = ["overview", "events", "zones"].includes(page) ? page : "overview";
+  $$(".page").forEach(p => p.hidden = p.dataset.page !== known);
+  $$("nav a").forEach(a => a.classList.toggle("active", a.dataset.nav === known));
+  requestAnimationFrame(sizeCanvases);
+}
+window.addEventListener("hashchange", showPage);
+
+/* ---------- Drawing ---------- */
+const stages = [
+  {img: $("#mapImg"), canvas: $("#mapCanvas"), empty: $("#mapEmpty"), editing: false},
+  {img: $("#edImg"), canvas: $("#edCanvas"), empty: $("#edEmpty"), editing: true},
+];
+const isActive = z => zoneTypes[z.type] && zoneTypes[z.type].modes.includes(mode);
+
+function sizeCanvases() {
+  stages.forEach(s => { s.canvas.width = s.img.clientWidth; s.canvas.height = s.img.clientHeight; });
+  drawAll();
+}
+function drawAll() { stages.forEach(drawStage); }
+
+function drawStage(s) {
+  const c = s.canvas, ctx = c.getContext("2d"), W = c.width, H = c.height;
+  if (!W || !H) return;
+  ctx.clearRect(0, 0, W, H);
+  zones.forEach(z => {
+    const on = isActive(z), [x1, y1, x2, y2] = z.box;
+    ctx.setLineDash(on ? [] : [6, 5]);
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = on ? "#d7263d" : "#8a96a3";
+    ctx.fillStyle = on ? "rgba(215,38,61,.14)" : "rgba(138,150,163,.10)";
+    ctx.fillRect(x1 * W, y1 * H, (x2 - x1) * W, (y2 - y1) * H);
+    ctx.strokeRect(x1 * W, y1 * H, (x2 - x1) * W, (y2 - y1) * H);
+    ctx.setLineDash([]);
+    ctx.font = "600 12px Manrope, system-ui, sans-serif";
+    const tw = ctx.measureText(z.name).width + 12, ty = Math.max(20, y1 * H);
+    ctx.fillStyle = on ? "#d7263d" : "#8a96a3";
+    ctx.fillRect(x1 * W, ty - 20, tw, 20);
+    ctx.fillStyle = "#fff";
+    ctx.fillText(z.name, x1 * W + 6, ty - 6);
+  });
+  if (livePose) {
+    const P = i => [livePose[i * 4] * W, livePose[i * 4 + 1] * H];
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = STATE_COLOR[liveState] || "#1f8a70";
+    BONES.forEach(([a, b]) => { ctx.beginPath(); ctx.moveTo(...P(a)); ctx.lineTo(...P(b)); ctx.stroke(); });
+    ctx.fillStyle = "#fff";
+    [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].forEach(i => { const [x, y] = P(i); ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 7); ctx.fill(); });
+  }
+  if (s.editing && pending) {
+    ctx.setLineDash([7, 5]);
+    ctx.strokeStyle = "#12263a";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(pending[0] * W, pending[1] * H, (pending[2] - pending[0]) * W, (pending[3] - pending[1]) * H);
+    ctx.setLineDash([]);
+  }
+}
+
+/* ---------- Snapshot ---------- */
+function loadSnapshot() { const src = "/api/snapshot?t=" + Date.now(); stages.forEach(s => s.img.src = src); }
+stages.forEach(s => {
+  s.img.onload = () => { s.empty.hidden = true; s.img.hidden = false; sizeCanvases(); };
+  s.img.onerror = () => { s.empty.hidden = false; s.img.hidden = true; s.canvas.width = s.canvas.height = 0; };
+});
+window.addEventListener("resize", sizeCanvases);
+$("#refreshSnap").onclick = loadSnapshot;
+$("#takeSnap").onclick = async () => {
+  const b = $("#takeSnap");
+  b.disabled = true; b.textContent = "Waiting for the camera...";
+  const {requested_at} = await api("/api/snapshot_request", {});
+  let got = false;
+  for (let i = 0; i < 15 && !got; i++) {
+    await new Promise(r => setTimeout(r, 1000));
+    try { got = (await api("/api/snapshot_info")).mtime >= requested_at; } catch (e) {}
+  }
+  if (got) { loadSnapshot(); toast("Snapshot taken", "Now drag a box around each hazard.", "info"); }
+  else toast("The camera didn't respond", "Check that live.py is running on the device, then try again.", "warning");
+  b.disabled = false; b.textContent = "Take snapshot";
+};
+
+/* ---------- Zone drawing ---------- */
+const ed = $("#edCanvas");
+function norm(e) {
+  const r = ed.getBoundingClientRect(), c = v => Math.min(Math.max(v, 0), 1);
+  return [c((e.clientX - r.left) / r.width), c((e.clientY - r.top) / r.height)];
+}
+ed.addEventListener("pointerdown", e => { start = norm(e); pending = null; ed.setPointerCapture(e.pointerId); });
+ed.addEventListener("pointermove", e => {
+  if (!start) return;
+  const p = norm(e);
+  pending = [Math.min(start[0], p[0]), Math.min(start[1], p[1]), Math.max(start[0], p[0]), Math.max(start[1], p[1])];
+  drawAll();
+});
+ed.addEventListener("pointerup", () => {
+  start = null;
+  if (pending && pending[2] - pending[0] > 0.02 && pending[3] - pending[1] > 0.02) {
+    $("#zoneForm").hidden = false; $("#zoneName").focus();
+  } else { pending = null; drawAll(); }
+});
+$("#zoneForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const type = $("#zoneType").value;
+  if (!type || !pending) return;
+  zones.push({id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+              name: $("#zoneName").value.trim() || zoneTypes[type].label, type, box: pending.map(v => +v.toFixed(4))});
+  pending = null; $("#zoneForm").hidden = true; $("#zoneName").value = "";
+  await saveZones();
+  toast("Zone saved", "It's active right away. No restart needed.", "info");
+});
+$("#cancelZone").onclick = () => { pending = null; $("#zoneForm").hidden = true; drawAll(); };
+$("#zoneList").addEventListener("click", async e => {
+  const i = e.target.dataset.del;
+  if (i === undefined) return;
+  zones.splice(+i, 1);
+  await saveZones();
+});
+async function saveZones() { zones = (await api("/api/zones", {zones})).zones; renderZones(); renderModeHelp(); }
+
+function renderZones() {
+  $("#zoneType").innerHTML = Object.entries(zoneTypes).filter(([, t]) => t.modes.includes(mode))
+    .map(([k, t]) => `<option value="${k}">${esc(t.label)}</option>`).join("");
+  $("#zoneList").innerHTML = zones.map((z, i) => {
+    const t = zoneTypes[z.type], on = isActive(z);
+    return `<div class="zone-item ${on ? "" : "inactive"}"><span class="swatch"></span>
+      <div><b>${esc(z.name)}</b><span>${esc(t ? t.label : z.type)}${on ? "" : " - not used " + (mode === "home" ? "at home" : "on a worksite")}</span></div>
+      <button data-del="${i}" aria-label="Delete ${esc(z.name)}">Delete</button></div>`;
+  }).join("") || '<p class="empty-note">No zones yet. Take a snapshot and drag a box around the first hazard.</p>';
+  drawAll();
+}
+
+/* ---------- Mode + camera view ---------- */
+function renderModeHelp() {
+  $("#modeHelp").textContent = mode === "home"
+    ? "Falls are watched for everyone. Zones use strict rules made for young children."
+    : "Falls are watched for everyone. Zones use worksite rules for adults at work.";
+  const active = zones.filter(isActive).length;
+  $("#watching").innerHTML = ["Fall prediction", "Fall alarm", "Not moving",
+    active ? active + (active === 1 ? " danger zone" : " danger zones") : "No zones yet"].map(t => `<span>${esc(t)}</span>`).join("");
+}
+function renderMode() {
+  $$(".mode-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
+  renderZones();
+  renderModeHelp();
+}
+$$(".mode-btn").forEach(b => b.onclick = async () => {
+  await api("/api/mode", {mode: b.dataset.mode});
+  mode = b.dataset.mode;
+  renderMode();
+  toast(mode === "home" ? "Home mode on" : "Worksite mode on",
+        mode === "home" ? "Falls are watched for everyone. Zones use strict rules for young children." : "Falls are watched for everyone. Zones use worksite rules: drop zones, machinery, edges.", "info");
+  renderModeHelp();
+});
+function renderView() {
+  $$(".option").forEach(o => { const on = o.dataset.view === view; o.classList.toggle("active", on); o.querySelector("input").checked = on; });
+}
+$$(".option input").forEach(inp => inp.onchange = async () => { await api("/api/view", {view: inp.value}); view = inp.value; renderView(); });
+
+/* ---------- Live status ---------- */
+$("#resetAlarm").onclick = async () => { await api("/api/reset", {}); toast("Alarm reset", "Back to watching.", "info"); };
+
+async function refreshStatus() {
+  try {
+    const s = await api("/api/status");
+    liveState = s.state;
+    livePose = s.pose;
+    const [word, says] = STATE_TEXT[s.state] || [s.state, ""];
+    $("#band").dataset.state = s.state;
+    $("#stateWord").textContent = word;
+    $("#stateSays").textContent = says;
+    $("#riskBar").style.width = Math.round(s.risk * 100) + "%";
+    $("#riskBar").style.background = STATE_COLOR[s.state];
+    $("#riskNum").textContent = Math.round(s.risk * 100) + "%";
+    $("#resetAlarm").hidden = s.state !== "ALARM";
+    $("#sourceLine").textContent = s.online ? "Source: " + s.source : "";
+    $("#devDot").classList.toggle("on", s.online);
+    $("#devText").textContent = s.online ? "Camera online" : "Camera offline";
+    document.title = (s.state === "ALARM" ? "ALARM - " : s.state === "WARNING" ? "Warning - " : "") + PRODUCT_NAME;
+    drawAll();
+  } catch (e) {
+    $("#stateSays").textContent = "Can't reach the server. Is server.py running?";
+  }
+}
+
+/* ---------- Events ---------- */
+const sev = e => (e.severity === "danger" ? "alarm" : e.severity || "info");
+const ICON = {
+  alarm: '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="8" cy="12.6" r="1.4" fill="currentColor"/></svg>',
+  warning: '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 6.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="11.4" r=".9" fill="currentColor"/></svg>',
+  info: '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+};
+function ago(ts) {
+  const s = (Date.now() - new Date(ts).getTime()) / 1000;
+  if (s < 60) return "just now";
+  if (s < 3600) return Math.floor(s / 60) + " min ago";
+  if (s < 86400) return Math.floor(s / 3600) + " h ago";
+  return new Date(ts).toLocaleDateString();
+}
+function evRow(e) {
+  const v = sev(e);
+  const actions = e.feedback
+    ? `<span class="verdict ${e.feedback}">${e.feedback === "real" ? "Real" : "False alarm"}</span>`
+    : `<button data-fb="real" data-id="${e.id}">Real</button><button data-fb="false" data-id="${e.id}">False alarm</button>`;
+  return `<div class="ev"><div class="ev-icon ${v}">${ICON[v] || ICON.info}</div>
+    <div><div class="ev-title">${esc(KIND[e.kind] || e.kind)}</div>
+      <div class="ev-detail">${esc(e.detail || e.zone || "")}</div>
+      <div class="ev-meta">${esc(ago(e.ts))} · ${esc((e.ts || "").replace("T", " "))} · ${e.mode === "work" ? "Worksite" : "Home"}${e.risk == null ? "" : " · fall risk " + Math.round(e.risk * 100) + "%"}</div></div>
+    <div class="ev-actions">${actions}</div></div>`;
+}
+function matches(e) {
+  const v = sev(e);
+  if (filter === "alarm" && v !== "alarm") return false;
+  if (filter === "warning" && v !== "warning") return false;
+  if (filter === "info" && v !== "info") return false;
+  if (filter === "review" && (e.feedback || v === "info")) return false;
+  if (query) {
+    const hay = [KIND[e.kind], e.kind, e.detail, e.zone].join(" ").toLowerCase();
+    if (!hay.includes(query)) return false;
+  }
+  return true;
+}
+function renderEvents() {
+  const today = new Date().toISOString().slice(0, 10);
+  const needReview = events.filter(e => !e.feedback && sev(e) !== "info");
+  $("#recentList").innerHTML = events.slice(0, 5).map(evRow).join("") ||
+    '<p class="empty-note">No alerts yet. When something risky happens, it shows up here.</p>';
+  const shown = events.filter(matches);
+  $("#eventList").innerHTML = shown.map(evRow).join("") ||
+    `<p class="empty-note">${events.length ? "No alerts match this filter." : "No alerts yet."}</p>`;
+  $("#cAll").textContent = events.length;
+  $("#cAlarm").textContent = events.filter(e => sev(e) === "alarm").length;
+  $("#cWarn").textContent = events.filter(e => sev(e) === "warning").length;
+  $("#cInfo").textContent = events.filter(e => sev(e) === "info").length;
+  $("#cReview").textContent = needReview.length;
+  $("#navBadge").textContent = needReview.length;
+  $("#navBadge").hidden = needReview.length === 0;
+  $("#tReview").textContent = needReview.length;
+  renderTimeline(today);
+  $("#tAlarms").textContent = events.filter(e => sev(e) === "alarm" && (e.ts || "").startsWith(today)).length;
+}
+function renderTimeline(today) {
+  const todays = events.filter(e => (e.ts || "").startsWith(today));
+  const pos = ts => { const d = new Date(ts); return (d.getHours() * 60 + d.getMinutes()) / 14.4; };
+  const now = new Date();
+  $("#timeline").innerHTML = `<div class="now" style="left:${(now.getHours() * 60 + now.getMinutes()) / 14.4}%"></div>` +
+    todays.map(e => `<div class="tick ${sev(e)}" style="left:${pos(e.ts)}%" title="${esc((e.ts || "").slice(11, 16) + " " + (KIND[e.kind] || e.kind))}"></div>`).join("");
+  const a = todays.filter(e => sev(e) === "alarm").length, w = todays.filter(e => sev(e) === "warning").length;
+  $("#tlSummary").textContent = todays.length ? `${a} alarm${a === 1 ? "" : "s"}, ${w} warning${w === 1 ? "" : "s"}` : "Quiet so far";
+}
+async function refreshEvents() {
+  try {
+    const list = await api("/api/events?limit=300");
+    if (lastEventId !== null) {
+      list.filter(e => e.id > lastEventId && sev(e) !== "info").reverse()
+          .forEach(e => toast(KIND[e.kind] || e.kind, e.detail || "", sev(e)));
+    }
+    if (list.length) lastEventId = Math.max(lastEventId ?? 0, list[0].id);
+    else if (lastEventId === null) lastEventId = 0;
+    events = list;
+    renderEvents();
+  } catch (e) {}
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-fb]");
+  if (!b) return;
+  await api(`/api/events/${b.dataset.id}/feedback`, {label: b.dataset.fb});
+  await refreshEvents(); refreshStats();
+});
+$("#filters").addEventListener("click", e => {
+  const c = e.target.closest(".chip");
+  if (!c) return;
+  filter = c.dataset.filter;
+  $$(".chip").forEach(x => x.classList.toggle("active", x === c));
+  renderEvents();
+});
+$("#search").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); renderEvents(); });
+
+async function refreshStats() {
+  try {
+    const s = await api("/api/stats");
+    $("#tToday").textContent = s.today;
+    const reviewed = s.real + s.false;
+    $("#tFalse").textContent = reviewed ? Math.round(100 * s.false / reviewed) + "%" : "-";
+  } catch (e) {}
+}
+
+/* ---------- Toasts ---------- */
+function toast(title, text, kind) {
+  const t = document.createElement("div");
+  t.className = "toast " + (kind || "");
+  t.innerHTML = `<b>${esc(title)}</b><span>${esc(text)}</span>`;
+  $("#toasts").prepend(t);
+  setTimeout(() => t.remove(), kind === "alarm" ? 9000 : 5000);
+  while ($("#toasts").children.length > 4) $("#toasts").lastChild.remove();
+}
+
+/* ---------- Start ---------- */
+(async () => {
+  document.title = PRODUCT_NAME;
+  $("#pname").textContent = PRODUCT_NAME;
+  zoneTypes = await api("/api/zone_types");
+  const c = await api("/api/config");
+  zones = c.zones; mode = c.mode; view = c.view || "angled";
+  renderMode(); renderView(); showPage(); loadSnapshot();
+  refreshStatus(); refreshEvents(); refreshStats();
+  setInterval(refreshStatus, 250);
+  setInterval(refreshEvents, 2000);
+  setInterval(refreshStats, 5000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+
+================================================================
+TEST RESULTS  (clips never used for training or model choice)
+================================================================
+Window level:  AUC 0.704   AP 0.677   (AP of random guessing = 0.502)
+Warning threshold (chosen on validation, best F1): 0.280
+
+Falls warned before impact:    220/223  (99%)
+Lead time (mTTA):              mean 2.71s, median 2.65s
+  warned at least 1s before:   98% of falls
+  warned at least 2s before:   69% of falls
+  warned at least 3s before:   41% of falls
+  (longest measurable lead with this footage: about 2.8s on average)
+
+Normal clips with a false warning: 119/140  (85%)
+False warnings per hour of normal footage: 1418  (measured on 7.6 min)
+
+Child clips: warned 92/93 falls, mean lead 2.79s; false warnings on 35/41 normal clips
