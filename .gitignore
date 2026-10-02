@@ -1,0 +1,7 @@
+   venv/
+   __pycache__/
+   *.task
+   data/*
+   !data/oops/
+   data/oops/*
+   !data/oops/results/
