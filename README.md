@@ -121,5 +121,9 @@ What the team did:
 The team can explain how every part of the system works.
 
 ## Team
-- [Full name 1]
-- [Full name 2]
+- Mark Joseph V. Nucos
+- Jade Cris I. Samuya
+- Vyns Samuel T. Hortelano
+- Jared Thomas G. Caldo
+- Ulysze Antoni P. Reyes
+- Andre Lawrence T. Tapusok
